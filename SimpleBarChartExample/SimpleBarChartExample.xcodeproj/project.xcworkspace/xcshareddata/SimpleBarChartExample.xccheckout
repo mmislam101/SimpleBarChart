@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>03598DAC-5DD8-4BA2-9185-BB0BC9B95813</string>
+	<key>IDESourceControlProjectName</key>
+	<string>SimpleBarChartExample</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</key>
+		<string>https://github.com/mmislam101/SimpleBarChart.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>SimpleBarChartExample/SimpleBarChartExample.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/mmislam101/SimpleBarChart.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</string>
+			<key>IDESourceControlWCCName</key>
+			<string>SimpleBarChart</string>
+		</dict>
+	</array>
+</dict>
+</plist>
