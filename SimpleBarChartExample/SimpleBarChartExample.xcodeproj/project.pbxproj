@@ -23,6 +23,7 @@
 		B64DA1B21889C7A50057CB9E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B64DA1B01889C7A50057CB9E /* InfoPlist.strings */; };
 		B64DA1B41889C7A60057CB9E /* SimpleBarChartExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B64DA1B31889C7A50057CB9E /* SimpleBarChartExampleTests.m */; };
 		B64DA1C01889C8370057CB9E /* SimpleBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */; };
+		B6ECC87A189B2A30001A7803 /* NSMutableArray+TTMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = B6ECC879189B2A30001A7803 /* NSMutableArray+TTMutableArray.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		B64DA1B31889C7A50057CB9E /* SimpleBarChartExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleBarChartExampleTests.m; sourceTree = "<group>"; };
 		B64DA1BE1889C8370057CB9E /* SimpleBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleBarChart.h; sourceTree = "<group>"; };
 		B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleBarChart.m; sourceTree = "<group>"; };
+		B6ECC878189B2A30001A7803 /* NSMutableArray+TTMutableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+TTMutableArray.h"; sourceTree = "<group>"; };
+		B6ECC879189B2A30001A7803 /* NSMutableArray+TTMutableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+TTMutableArray.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -124,6 +127,7 @@
 				B64DA19D1889C7A50057CB9E /* SBCEViewController.h */,
 				B64DA19E1889C7A50057CB9E /* SBCEViewController.m */,
 				B64DA1A01889C7A50057CB9E /* Images.xcassets */,
+				B6ECC877189B2A30001A7803 /* Categories */,
 				B64DA1BD1889C8370057CB9E /* SimpleBarChart */,
 				B64DA18C1889C7A50057CB9E /* Supporting Files */,
 			);
@@ -166,6 +170,15 @@
 				B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */,
 			);
 			path = SimpleBarChart;
+			sourceTree = "<group>";
+		};
+		B6ECC877189B2A30001A7803 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				B6ECC878189B2A30001A7803 /* NSMutableArray+TTMutableArray.h */,
+				B6ECC879189B2A30001A7803 /* NSMutableArray+TTMutableArray.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -271,6 +284,7 @@
 				B64DA1921889C7A50057CB9E /* main.m in Sources */,
 				B64DA19F1889C7A50057CB9E /* SBCEViewController.m in Sources */,
 				B64DA1961889C7A50057CB9E /* SBCEAppDelegate.m in Sources */,
+				B6ECC87A189B2A30001A7803 /* NSMutableArray+TTMutableArray.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -489,6 +503,7 @@
 				B64DA1B91889C7A60057CB9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		B64DA1BA1889C7A60057CB9E /* Build configuration list for PBXNativeTarget "SimpleBarChartExampleTests" */ = {
 			isa = XCConfigurationList;
@@ -497,6 +512,7 @@
 				B64DA1BC1889C7A60057CB9E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

@@ -14,6 +14,9 @@
 	NSArray *_values;
 
 	SimpleBarChart *_chart;
+
+	NSArray *_barColors;
+	NSInteger _currentBarColor;
 }
 
 @end

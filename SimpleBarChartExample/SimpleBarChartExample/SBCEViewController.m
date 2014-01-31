@@ -7,6 +7,7 @@
 //
 
 #import "SBCEViewController.h"
+#import "NSMutableArray+TTMutableArray.h"
 
 
 @interface SBCEViewController ()
@@ -20,6 +21,8 @@
 	[super loadView];
 
 	_values							= @[@30, @45, @44, @60, @95, @2, @8, @9];
+	_barColors						= @[[UIColor blueColor], [UIColor redColor], [UIColor blackColor], [UIColor orangeColor], [UIColor purpleColor], [UIColor greenColor]];
+	_currentBarColor				= 0;
 
 	CGRect chartFrame				= CGRectMake(0.0,
 												 0.0,
@@ -35,13 +38,41 @@
 	_chart.barShadowAlpha			= 0.5;
 	_chart.barShadowRadius			= 1.0;
 	_chart.barWidth					= 18.0;
-	_chart.xLabelType				= SimpleBarChartXLabelTypeHorizontal;
+	_chart.xLabelType				= SimpleBarChartXLabelTypeVerticle;
 	_chart.incrementValue			= 10;
-	_chart.barTextType				= SimpleBarChartBarTextTypeRoof;
-	_chart.barTextColor				= [UIColor blackColor];
+	_chart.barTextType				= SimpleBarChartBarTextTypeTop;
+	_chart.barTextColor				= [UIColor whiteColor];
 	_chart.gridColor				= [UIColor grayColor];
 
 	[self.view addSubview:_chart];
+
+	UIButton *changeButton			= [UIButton buttonWithType:UIButtonTypeRoundedRect];
+	changeButton.frame				= CGRectMake(0.0,
+												 _chart.frame.origin.y + _chart.frame.size.height + 20.0,
+												 100.0,
+												 44.0);
+	changeButton.center				= CGPointMake(self.view.frame.size.width / 2.0, changeButton.center.y);
+	[changeButton setTitle:@"Change" forState:UIControlStateNormal];
+	[changeButton addTarget:self action:@selector(changeClicked) forControlEvents:UIControlEventTouchDown];
+
+	[self.view addSubview:changeButton];
+}
+
+- (void)changeClicked
+{
+	NSMutableArray *valuesCopy = _values.mutableCopy;
+	[valuesCopy shuffle];
+
+	_values = valuesCopy;
+
+	if (_chart.xLabelType == SimpleBarChartXLabelTypeVerticle)
+		_chart.xLabelType = SimpleBarChartXLabelTypeHorizontal;
+	else
+		_chart.xLabelType = SimpleBarChartXLabelTypeVerticle;
+
+	_currentBarColor = ++_currentBarColor % _barColors.count;
+
+	[_chart reloadData];
 }
 
 - (void)viewDidLoad
@@ -75,10 +106,10 @@
 	return [[_values objectAtIndex:index] floatValue];
 }
 
-//- (NSString *)barChart:(SimpleBarChart *)barChart textForBarAtIndex:(NSUInteger)index
-//{
-//	return [[_values objectAtIndex:index] stringValue];
-//}
+- (NSString *)barChart:(SimpleBarChart *)barChart textForBarAtIndex:(NSUInteger)index
+{
+	return [[_values objectAtIndex:index] stringValue];
+}
 
 - (NSString *)barChart:(SimpleBarChart *)barChart xLabelForBarAtIndex:(NSUInteger)index
 {
@@ -87,7 +118,7 @@
 
 - (UIColor *)barChart:(SimpleBarChart *)barChart colorForBarAtIndex:(NSUInteger)index
 {
-	return [UIColor redColor];
+	return [_barColors objectAtIndex:_currentBarColor];
 }
 
 
