@@ -80,7 +80,7 @@ typedef enum
 	NSMutableArray *_barHeights;
 	NSMutableArray *_barLabels;
 	NSMutableArray *_barTexts;
-	NSInteger _topValue;
+	CGFloat _topValue;
 	NSInteger _numberOfBars;
 	
 	// Borders
@@ -135,7 +135,7 @@ typedef enum
 // Control the grids
 @property (nonatomic, assign) BOOL hasGrids;
 @property (nonatomic, strong) UIColor *gridColor;
-@property (nonatomic, assign) NSInteger incrementValue; // Every x draw a grid line (this also controls the height of the bar graph which is calculated to be the ceiling of this value (ex. if incrementValue = 10, the highest bar in the set is 23, then the top of the graph will be 30. Or.. incrementValue = 20 and _maxHeight = 46 then top will be 60. hasGrids only controls the displaying of the grid, not this calculation for the top.
+@property (nonatomic, assign) CGFloat incrementValue; // Every x draw a grid line (this also controls the height of the bar graph which is calculated to be the ceiling of this value (ex. if incrementValue = 10, the highest bar in the set is 23, then the top of the graph will be 30. Or.. incrementValue = 20 and _maxHeight = 46 then top will be 60. hasGrids only controls the displaying of the grid, not this calculation for the top.
 
 - (void)reloadData;
 

@@ -45,7 +45,7 @@ dataSource	= _dataSource;
 
 	self.animationDuration	= 1.0;
 	self.hasGrids			= YES;
-	self.incrementValue		= 10;
+	self.incrementValue		= 10.0;
 	self.barWidth			= 20.0;
 	self.barAlpha			= 1.0;
 	self.chartBorderColor	= [UIColor blackColor];
@@ -111,11 +111,12 @@ dataSource	= _dataSource;
 				[_barTexts addObject:[_dataSource barChart:self textForBarAtIndex:i]];
 		}
 		
-		_maxHeight		= [_barHeights valueForKeyPath:@"@max.self"];
-		_minHeight		= [_barHeights valueForKeyPath:@"@min.self"];
+		_maxHeight			= [_barHeights valueForKeyPath:@"@max.self"];
+		_minHeight			= [_barHeights valueForKeyPath:@"@min.self"];
 		
 		// Round up to the next increment value
-		_topValue		= (self.incrementValue - (_maxHeight.integerValue % self.incrementValue)) + _maxHeight.integerValue;
+		CGFloat remainder	= fmod(_maxHeight.floatValue / self.incrementValue, 1) * self.incrementValue;
+		_topValue			= (self.incrementValue - remainder) + _maxHeight.floatValue;
 
 		// Find max height of the x Labels based on the angle of rotation of the text
 		switch (self.xLabelType)
@@ -150,8 +151,9 @@ dataSource	= _dataSource;
 		}
 
 		// Begin Drawing
-		// Set Frames		
-		CGSize yLabelSize		= self.hasYLabels ? [[NSString stringWithFormat:@"%i", _topValue] sizeWithFont:self.yLabelFont] : CGSizeZero;
+		// Set Frames
+		NSString *stringFormat	= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
+		CGSize yLabelSize		= self.hasYLabels ? [[NSString stringWithFormat:stringFormat, _topValue] sizeWithFont:self.yLabelFont] : CGSizeZero;
 		_yLabelView.frame		= CGRectMake(0.0,
 											 0.0,
 											 self.hasYLabels ? yLabelSize.width + 5.0 : 0.0,
@@ -255,7 +257,7 @@ dataSource	= _dataSource;
 	}
 	[_barPathLayers removeAllObjects];
 
-	CGFloat barHeightRatio	= _barLayer.bounds.size.height / (CGFloat)_topValue;
+	CGFloat barHeightRatio	= _barLayer.bounds.size.height / _topValue;
 	CGFloat	xPos			= _barLayer.bounds.size.width / (_numberOfBars + 1);
 	
 	for (NSInteger i = 0; i < _numberOfBars; i++)
@@ -341,7 +343,7 @@ dataSource	= _dataSource;
 	}
 	
 	CGFloat gridUnit		= _gridLayer.bounds.size.height / _topValue;
-	CGFloat gridSeperation	= gridUnit * (CGFloat)self.incrementValue;
+	CGFloat gridSeperation	= gridUnit * self.incrementValue;
 
 	CGFloat yPos			= gridSeperation;
 	UIBezierPath *path		= [UIBezierPath bezierPath];
@@ -397,11 +399,12 @@ dataSource	= _dataSource;
 	}
 
 	CGFloat gridUnit			= _gridLayer.bounds.size.height / _topValue;
-	CGFloat gridSeperation		= gridUnit * (CGFloat)self.incrementValue;
+	CGFloat gridSeperation		= gridUnit * self.incrementValue;
 
-	CGSize yLabelSize			= [[NSString stringWithFormat:@"%i", _topValue] sizeWithFont:self.yLabelFont];
+	NSString *stringFormat		= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
+	CGSize yLabelSize			= [[NSString stringWithFormat:stringFormat, _topValue] sizeWithFont:self.yLabelFont];
 	CGFloat yPos				= 0.0;
-	NSInteger maxVal			= _topValue;
+	CGFloat maxVal				= _topValue;
 	while (yPos < _gridLayer.bounds.size.height)
 	{
 		CGRect yLabelFrame		= CGRectMake(0.0,
@@ -414,7 +417,9 @@ dataSource	= _dataSource;
 		yLabel.textColor		= self.yLabelColor;
 		yLabel.textAlignment	= NSTextAlignmentRight;
 		yLabel.center			= CGPointMake(yLabel.center.x, yPos);
-		yLabel.text				= [NSString stringWithFormat:@"%i", maxVal];
+
+		NSString *stringFormat	= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
+		yLabel.text				= [NSString stringWithFormat:stringFormat, maxVal];
 
 		[_yLabelView addSubview:yLabel];
 
@@ -506,7 +511,7 @@ dataSource	= _dataSource;
 		barText.textAlignment	= NSTextAlignmentCenter;
 		barText.text			= barLabelText;
 
-		CGFloat barHeight		= (_barLayer.bounds.size.height / (CGFloat)_topValue) * ((NSNumber *)[_barHeights objectAtIndex:i]).floatValue;
+		CGFloat barHeight		= (_barLayer.bounds.size.height / _topValue) * ((NSNumber *)[_barHeights objectAtIndex:i]).floatValue;
 		
 		// Position the label appropriately
 		switch (self.barTextType)
@@ -522,7 +527,7 @@ dataSource	= _dataSource;
 
 			case SimpleBarChartBarTextTypeMiddle:
 			{
-				CGFloat minBarHeight	= (_barLayer.bounds.size.height / (CGFloat)_topValue) * _minHeight.floatValue;
+				CGFloat minBarHeight	= (_barLayer.bounds.size.height / _topValue) * _minHeight.floatValue;
 				barText.center			= CGPointMake(xPos, _barLayer.bounds.size.height - (minBarHeight / 2.0));
 				break;
 			}
