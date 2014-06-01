@@ -334,7 +334,7 @@ dataSource	= _dataSource;
 
 	CGFloat yPos			= gridSeperation;
 	UIBezierPath *path		= [UIBezierPath bezierPath];
-	while (yPos <= _gridLayer.bounds.size.height)
+	while (yPos < _gridLayer.bounds.size.height || [self floatsAlmostEqualBetweenValue1:yPos value2:_gridLayer.bounds.size.height andPrecision:0.001])
 	{
 		CGPoint left	= CGPointMake(0.0, yPos);
 		CGPoint right	= CGPointMake(_gridLayer.bounds.size.width, yPos);
@@ -355,6 +355,17 @@ dataSource	= _dataSource;
 	_gridPathLayer.lineJoin			= kCALineJoinBevel;
 
 	[_gridLayer addSublayer:_gridPathLayer];
+}
+
+// From http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+- (BOOL)floatsAlmostEqualBetweenValue1:(CGFloat)value1 value2:(CGFloat)value2 andPrecision:(CGFloat)precision
+{
+    if (value1 == value2)
+        return YES;
+    CGFloat relativeError = fabs((value1 - value2) / value2);
+    if (relativeError <= precision)
+        return YES;
+    return NO;
 }
 
 - (void)drawGrid
