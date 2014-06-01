@@ -142,27 +142,17 @@ dataSource	= _dataSource;
 
 			if (labelSize.height > labelHeightWithAngle)
 			{
-				_xLabelMaxHeight = (_xLabelMaxHeight > labelSize.height) ? _xLabelMaxHeight : labelSize.height;
+				_xLabelMaxHeight = MAX(_xLabelMaxHeight, labelSize.height);
 			}
 			else
 			{
-				_xLabelMaxHeight = (_xLabelMaxHeight > labelHeightWithAngle) ? _xLabelMaxHeight : labelHeightWithAngle;
+				_xLabelMaxHeight = MAX(_xLabelMaxHeight, labelHeightWithAngle);
 			}
 		}
 
 		// Begin Drawing
-		// Set Frames
-		NSString *stringFormat	= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
-		CGSize yLabelSize		= self.hasYLabels ? [[NSString stringWithFormat:stringFormat, _topValue] sizeWithFont:self.yLabelFont] : CGSizeZero;
-		_yLabelView.frame		= CGRectMake(0.0,
-											 0.0,
-											 self.hasYLabels ? yLabelSize.width + 5.0 : 0.0,
-											 self.bounds.size.height);
-		
-		_xLabelView.frame		= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
-											 self.bounds.size.height - _xLabelMaxHeight,
-											 self.bounds.size.width - (_yLabelView.frame.origin.x + _yLabelView.frame.size.width),
-											 _xLabelMaxHeight);
+		[self setupYAxisLabels];
+		[self setupXAxisLabels];
 		
 		_gridLayer.frame		= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
 											 0.0,
@@ -186,9 +176,6 @@ dataSource	= _dataSource;
 			[self setupGrid];
 			[self drawGrid];
 		}
-
-		[self setupYAxisLabels];
-		[self setupXAxisLabels];
 
 		[self setupBarTexts];
 	}
@@ -398,15 +385,19 @@ dataSource	= _dataSource;
 		[[_yLabelView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 	}
 
-	CGFloat gridUnit			= _gridLayer.bounds.size.height / _topValue;
+	CGFloat yLabelFrameHeight	= self.bounds.size.height - (_xLabelMaxHeight > 0.0 ? (_xLabelMaxHeight + 5.0) : 0.0);
+	CGFloat gridUnit			= yLabelFrameHeight / _topValue;
 	CGFloat gridSeperation		= gridUnit * self.incrementValue;
 
-	NSString *stringFormat		= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
-	CGSize yLabelSize			= [[NSString stringWithFormat:stringFormat, _topValue] sizeWithFont:self.yLabelFont];
 	CGFloat yPos				= 0.0;
 	CGFloat maxVal				= _topValue;
-	while (yPos < _gridLayer.bounds.size.height)
+	CGFloat maxWidth			= 0.0;
+
+	while (yPos < yLabelFrameHeight)
 	{
+		NSString *stringFormat	= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
+		NSString *yLabelString	= [NSString stringWithFormat:stringFormat, maxVal];
+		CGSize yLabelSize		= [yLabelString sizeWithFont:self.yLabelFont];
 		CGRect yLabelFrame		= CGRectMake(0.0,
 											 0.0,
 											 yLabelSize.width,
@@ -417,15 +408,19 @@ dataSource	= _dataSource;
 		yLabel.textColor		= self.yLabelColor;
 		yLabel.textAlignment	= NSTextAlignmentRight;
 		yLabel.center			= CGPointMake(yLabel.center.x, yPos);
-
-		NSString *stringFormat	= (_topValue < 1.0) ? @"%.1f" : @"%.0f";
-		yLabel.text				= [NSString stringWithFormat:stringFormat, maxVal];
+		yLabel.text				= yLabelString;
 
 		[_yLabelView addSubview:yLabel];
 
+		maxWidth				= MAX(maxWidth, yLabelSize.width);
 		maxVal					-= self.incrementValue;
 		yPos					+= gridSeperation;
 	}
+
+	_yLabelView.frame		= CGRectMake(0.0,
+										 0.0,
+										 self.hasYLabels ? maxWidth + 5.0 : 0.0,
+										 yLabelFrameHeight);
 }
 
 - (void)setupXAxisLabels
@@ -439,7 +434,8 @@ dataSource	= _dataSource;
 		[[_xLabelView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 	}
 
-	CGFloat	xPos				= _barLayer.bounds.size.width / (_numberOfBars + 1);
+	CGFloat xLabelFrameWidth	= self.bounds.size.width - (_yLabelView.frame.origin.x + _yLabelView.frame.size.width);
+	CGFloat	xPos				= xLabelFrameWidth / (_numberOfBars + 1);
 
 	for (NSInteger i = 0; i < _numberOfBars; i++)
 	{
@@ -479,8 +475,13 @@ dataSource	= _dataSource;
 
 		[_xLabelView addSubview:xLabel];
 
-		xPos					+= _barLayer.bounds.size.width / (_numberOfBars + 1);
+		xPos					+= xLabelFrameWidth / (_numberOfBars + 1);
 	}
+
+	_xLabelView.frame			= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
+											 self.bounds.size.height - _xLabelMaxHeight,
+											 xLabelFrameWidth,
+											 _xLabelMaxHeight);
 }
 
 - (void)setupBarTexts
