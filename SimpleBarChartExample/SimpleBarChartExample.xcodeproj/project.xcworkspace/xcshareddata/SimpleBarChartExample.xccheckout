@@ -10,29 +10,29 @@
 	<string>SimpleBarChartExample</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</key>
+		<key>22539DE78657455E2C5A925B6A7D3B1ECF479F8B</key>
 		<string>https://github.com/mmislam101/SimpleBarChart.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>SimpleBarChartExample/SimpleBarChartExample.xcodeproj/project.xcworkspace</string>
+	<string>SimpleBarChartExample/SimpleBarChartExample.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</key>
+		<key>22539DE78657455E2C5A925B6A7D3B1ECF479F8B</key>
 		<string>../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/mmislam101/SimpleBarChart.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</string>
+	<string>22539DE78657455E2C5A925B6A7D3B1ECF479F8B</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>CBA86904-0C92-4CFC-B3C4-FFF9B31C97DD</string>
+			<string>22539DE78657455E2C5A925B6A7D3B1ECF479F8B</string>
 			<key>IDESourceControlWCCName</key>
 			<string>SimpleBarChart</string>
 		</dict>

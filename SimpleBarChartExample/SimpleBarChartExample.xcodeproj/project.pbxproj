@@ -22,7 +22,7 @@
 		B64DA1AA1889C7A50057CB9E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B64DA1891889C7A50057CB9E /* UIKit.framework */; };
 		B64DA1B21889C7A50057CB9E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = B64DA1B01889C7A50057CB9E /* InfoPlist.strings */; };
 		B64DA1B41889C7A60057CB9E /* SimpleBarChartExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B64DA1B31889C7A50057CB9E /* SimpleBarChartExampleTests.m */; };
-		B64DA1C01889C8370057CB9E /* SimpleBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */; };
+		B6DF242A19FF5F220016D5D4 /* SimpleBarChart.m in Sources */ = {isa = PBXBuildFile; fileRef = B6DF242919FF5F220016D5D4 /* SimpleBarChart.m */; };
 		B6ECC87A189B2A30001A7803 /* NSMutableArray+TTMutableArray.m in Sources */ = {isa = PBXBuildFile; fileRef = B6ECC879189B2A30001A7803 /* NSMutableArray+TTMutableArray.m */; };
 /* End PBXBuildFile section */
 
@@ -57,8 +57,8 @@
 		B64DA1AF1889C7A50057CB9E /* SimpleBarChartExampleTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "SimpleBarChartExampleTests-Info.plist"; sourceTree = "<group>"; };
 		B64DA1B11889C7A50057CB9E /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		B64DA1B31889C7A50057CB9E /* SimpleBarChartExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleBarChartExampleTests.m; sourceTree = "<group>"; };
-		B64DA1BE1889C8370057CB9E /* SimpleBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleBarChart.h; sourceTree = "<group>"; };
-		B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleBarChart.m; sourceTree = "<group>"; };
+		B6DF242819FF5F220016D5D4 /* SimpleBarChart.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleBarChart.h; sourceTree = "<group>"; };
+		B6DF242919FF5F220016D5D4 /* SimpleBarChart.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleBarChart.m; sourceTree = "<group>"; };
 		B6ECC878189B2A30001A7803 /* NSMutableArray+TTMutableArray.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSMutableArray+TTMutableArray.h"; sourceTree = "<group>"; };
 		B6ECC879189B2A30001A7803 /* NSMutableArray+TTMutableArray.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSMutableArray+TTMutableArray.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,6 +90,7 @@
 		B64DA1791889C7A50057CB9E = {
 			isa = PBXGroup;
 			children = (
+				B6DF242719FF5F220016D5D4 /* SimpleBarChart */,
 				B64DA18B1889C7A50057CB9E /* SimpleBarChartExample */,
 				B64DA1AD1889C7A50057CB9E /* SimpleBarChartExampleTests */,
 				B64DA1841889C7A50057CB9E /* Frameworks */,
@@ -128,7 +129,6 @@
 				B64DA19E1889C7A50057CB9E /* SBCEViewController.m */,
 				B64DA1A01889C7A50057CB9E /* Images.xcassets */,
 				B6ECC877189B2A30001A7803 /* Categories */,
-				B64DA1BD1889C8370057CB9E /* SimpleBarChart */,
 				B64DA18C1889C7A50057CB9E /* Supporting Files */,
 			);
 			path = SimpleBarChartExample;
@@ -163,11 +163,11 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		B64DA1BD1889C8370057CB9E /* SimpleBarChart */ = {
+		B6DF242719FF5F220016D5D4 /* SimpleBarChart */ = {
 			isa = PBXGroup;
 			children = (
-				B64DA1BE1889C8370057CB9E /* SimpleBarChart.h */,
-				B64DA1BF1889C8370057CB9E /* SimpleBarChart.m */,
+				B6DF242819FF5F220016D5D4 /* SimpleBarChart.h */,
+				B6DF242919FF5F220016D5D4 /* SimpleBarChart.m */,
 			);
 			path = SimpleBarChart;
 			sourceTree = "<group>";
@@ -280,7 +280,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B64DA1C01889C8370057CB9E /* SimpleBarChart.m in Sources */,
+				B6DF242A19FF5F220016D5D4 /* SimpleBarChart.m in Sources */,
 				B64DA1921889C7A50057CB9E /* main.m in Sources */,
 				B64DA19F1889C7A50057CB9E /* SBCEViewController.m in Sources */,
 				B64DA1961889C7A50057CB9E /* SBCEAppDelegate.m in Sources */,
