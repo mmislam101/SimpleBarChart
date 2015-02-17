@@ -45,7 +45,7 @@ dataSource	= _dataSource;
 
 	self.animationDuration	= 1.0;
 	self.hasGrids			= YES;
-	self.incrementValue		= 10;
+	self.incrementValue		= 10.0;
 	self.barWidth			= 20.0;
 	self.barAlpha			= 1.0;
 	self.chartBorderColor	= [UIColor blackColor];
@@ -111,11 +111,13 @@ dataSource	= _dataSource;
 				[_barTexts addObject:[_dataSource barChart:self textForBarAtIndex:i]];
 		}
 		
-		_maxHeight		= [_barHeights valueForKeyPath:@"@max.self"];
-		_minHeight		= [_barHeights valueForKeyPath:@"@min.self"];
+		_maxHeight			= [_barHeights valueForKeyPath:@"@max.self"];
+		_minHeight			= [_barHeights valueForKeyPath:@"@min.self"];
 		
 		// Round up to the next increment value
-		_topValue		= (self.incrementValue - (_maxHeight.integerValue % self.incrementValue)) + _maxHeight.integerValue;
+		CGFloat remainder	= fmod(_maxHeight.floatValue / self.incrementValue, 1) * self.incrementValue;
+		NSLog(@"incrementValue: %f, remainder: %f, maxHeight, %f", self.incrementValue, remainder, _maxHeight.floatValue);
+		_topValue			= (self.incrementValue - remainder) + _maxHeight.floatValue;
 
 		// Find max height of the x Labels based on the angle of rotation of the text
 		switch (self.xLabelType)
@@ -141,26 +143,17 @@ dataSource	= _dataSource;
 
 			if (labelSize.height > labelHeightWithAngle)
 			{
-				_xLabelMaxHeight = (_xLabelMaxHeight > labelSize.height) ? _xLabelMaxHeight : labelSize.height;
+				_xLabelMaxHeight = MAX(_xLabelMaxHeight, labelSize.height);
 			}
 			else
 			{
-				_xLabelMaxHeight = (_xLabelMaxHeight > labelHeightWithAngle) ? _xLabelMaxHeight : labelHeightWithAngle;
+				_xLabelMaxHeight = MAX(_xLabelMaxHeight, labelHeightWithAngle);
 			}
 		}
 
 		// Begin Drawing
-		// Set Frames		
-		CGSize yLabelSize		= self.hasYLabels ? [[NSString stringWithFormat:@"%i", _topValue] sizeWithFont:self.yLabelFont] : CGSizeZero;
-		_yLabelView.frame		= CGRectMake(0.0,
-											 0.0,
-											 self.hasYLabels ? yLabelSize.width + 5.0 : 0.0,
-											 self.bounds.size.height);
-		
-		_xLabelView.frame		= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
-											 self.bounds.size.height - _xLabelMaxHeight,
-											 self.bounds.size.width - (_yLabelView.frame.origin.x + _yLabelView.frame.size.width),
-											 _xLabelMaxHeight);
+		[self setupYAxisLabels];
+		[self setupXAxisLabels];
 		
 		_gridLayer.frame		= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
 											 0.0,
@@ -184,9 +177,6 @@ dataSource	= _dataSource;
 			[self setupGrid];
 			[self drawGrid];
 		}
-
-		[self setupYAxisLabels];
-		[self setupXAxisLabels];
 
 		[self setupBarTexts];
 	}
@@ -255,7 +245,7 @@ dataSource	= _dataSource;
 	}
 	[_barPathLayers removeAllObjects];
 
-	CGFloat barHeightRatio	= _barLayer.bounds.size.height / (CGFloat)_topValue;
+	CGFloat barHeightRatio	= _barLayer.bounds.size.height / _topValue;
 	CGFloat	xPos			= _barLayer.bounds.size.width / (_numberOfBars + 1);
 	
 	for (NSInteger i = 0; i < _numberOfBars; i++)
@@ -341,11 +331,11 @@ dataSource	= _dataSource;
 	}
 	
 	CGFloat gridUnit		= _gridLayer.bounds.size.height / _topValue;
-	CGFloat gridSeperation	= gridUnit * (CGFloat)self.incrementValue;
+	CGFloat gridSeperation	= gridUnit * self.incrementValue;
 
 	CGFloat yPos			= gridSeperation;
 	UIBezierPath *path		= [UIBezierPath bezierPath];
-	while (yPos <= _gridLayer.bounds.size.height)
+	while (yPos < _gridLayer.bounds.size.height || [self floatsAlmostEqualBetweenValue1:yPos value2:_gridLayer.bounds.size.height andPrecision:0.001])
 	{
 		CGPoint left	= CGPointMake(0.0, yPos);
 		CGPoint right	= CGPointMake(_gridLayer.bounds.size.width, yPos);
@@ -366,6 +356,17 @@ dataSource	= _dataSource;
 	_gridPathLayer.lineJoin			= kCALineJoinBevel;
 
 	[_gridLayer addSublayer:_gridPathLayer];
+}
+
+// From http://www.cygnus-software.com/papers/comparingfloats/comparingfloats.htm
+- (BOOL)floatsAlmostEqualBetweenValue1:(CGFloat)value1 value2:(CGFloat)value2 andPrecision:(CGFloat)precision
+{
+    if (value1 == value2)
+        return YES;
+    CGFloat relativeError = fabs((value1 - value2) / value2);
+    if (relativeError <= precision)
+        return YES;
+    return NO;
 }
 
 - (void)drawGrid
@@ -396,14 +397,19 @@ dataSource	= _dataSource;
 		[[_yLabelView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 	}
 
-	CGFloat gridUnit			= _gridLayer.bounds.size.height / _topValue;
-	CGFloat gridSeperation		= gridUnit * (CGFloat)self.incrementValue;
+	CGFloat yLabelFrameHeight	= self.bounds.size.height - (_xLabelMaxHeight > 0.0 ? (_xLabelMaxHeight + 5.0) : 0.0);
+	CGFloat gridUnit			= yLabelFrameHeight / _topValue;
+	CGFloat gridSeperation		= gridUnit * self.incrementValue;
 
-	CGSize yLabelSize			= [[NSString stringWithFormat:@"%i", _topValue] sizeWithFont:self.yLabelFont];
 	CGFloat yPos				= 0.0;
-	NSInteger maxVal			= _topValue;
-	while (yPos < _gridLayer.bounds.size.height)
+	CGFloat maxVal				= _topValue;
+	CGFloat maxWidth			= 0.0;
+
+	while (yPos < yLabelFrameHeight)
 	{
+		NSString *stringFormat	= (_topValue <= 1.0) ? @"%.1f" : @"%.0f";
+		NSString *yLabelString	= [NSString stringWithFormat:stringFormat, maxVal];
+		CGSize yLabelSize		= [yLabelString sizeWithFont:self.yLabelFont];
 		CGRect yLabelFrame		= CGRectMake(0.0,
 											 0.0,
 											 yLabelSize.width,
@@ -414,13 +420,19 @@ dataSource	= _dataSource;
 		yLabel.textColor		= self.yLabelColor;
 		yLabel.textAlignment	= NSTextAlignmentRight;
 		yLabel.center			= CGPointMake(yLabel.center.x, yPos);
-		yLabel.text				= [NSString stringWithFormat:@"%i", maxVal];
+		yLabel.text				= yLabelString;
 
 		[_yLabelView addSubview:yLabel];
 
+		maxWidth				= MAX(maxWidth, yLabelSize.width);
 		maxVal					-= self.incrementValue;
 		yPos					+= gridSeperation;
 	}
+
+	_yLabelView.frame		= CGRectMake(0.0,
+										 0.0,
+										 self.hasYLabels ? maxWidth + 5.0 : 0.0,
+										 yLabelFrameHeight);
 }
 
 - (void)setupXAxisLabels
@@ -434,7 +446,8 @@ dataSource	= _dataSource;
 		[[_xLabelView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
 	}
 
-	CGFloat	xPos				= _barLayer.bounds.size.width / (_numberOfBars + 1);
+	CGFloat xLabelFrameWidth	= self.bounds.size.width - (_yLabelView.frame.origin.x + _yLabelView.frame.size.width);
+	CGFloat	xPos				= xLabelFrameWidth / (_numberOfBars + 1);
 
 	for (NSInteger i = 0; i < _numberOfBars; i++)
 	{
@@ -474,8 +487,13 @@ dataSource	= _dataSource;
 
 		[_xLabelView addSubview:xLabel];
 
-		xPos					+= _barLayer.bounds.size.width / (_numberOfBars + 1);
+		xPos					+= xLabelFrameWidth / (_numberOfBars + 1);
 	}
+
+	_xLabelView.frame			= CGRectMake(_yLabelView.frame.origin.x + _yLabelView.frame.size.width,
+											 self.bounds.size.height - _xLabelMaxHeight,
+											 xLabelFrameWidth,
+											 _xLabelMaxHeight);
 }
 
 - (void)setupBarTexts
@@ -506,7 +524,7 @@ dataSource	= _dataSource;
 		barText.textAlignment	= NSTextAlignmentCenter;
 		barText.text			= barLabelText;
 
-		CGFloat barHeight		= (_barLayer.bounds.size.height / (CGFloat)_topValue) * ((NSNumber *)[_barHeights objectAtIndex:i]).floatValue;
+		CGFloat barHeight		= (_barLayer.bounds.size.height / _topValue) * ((NSNumber *)[_barHeights objectAtIndex:i]).floatValue;
 		
 		// Position the label appropriately
 		switch (self.barTextType)
@@ -522,7 +540,7 @@ dataSource	= _dataSource;
 
 			case SimpleBarChartBarTextTypeMiddle:
 			{
-				CGFloat minBarHeight	= (_barLayer.bounds.size.height / (CGFloat)_topValue) * _minHeight.floatValue;
+				CGFloat minBarHeight	= (_barLayer.bounds.size.height / _topValue) * _minHeight.floatValue;
 				barText.center			= CGPointMake(xPos, _barLayer.bounds.size.height - (minBarHeight / 2.0));
 				break;
 			}
