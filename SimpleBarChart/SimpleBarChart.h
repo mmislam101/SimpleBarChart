@@ -44,6 +44,12 @@ typedef enum
 	SimpleBarChartBarTextTypeMiddle		// All text is aligned in the center of the shortest bar
 } SimpleBarChartBarTextType;
 
+typedef enum
+{
+	SimpleBarChartYAxisLabelTypeInteger,	// Display the y-axis labels as Integers
+	SimpleBarChartYAxisLabelTypeFloat,		// Display the y-axis labels as floats
+} SimpleBarChartYAxisLabelType;
+
 @class SimpleBarChart;
 
 @protocol SimpleBarChartDataSource <NSObject>
@@ -121,6 +127,7 @@ typedef enum
 @property (nonatomic, assign) BOOL hasYLabels;
 @property (nonatomic, strong) UIFont *yLabelFont;
 @property (nonatomic, strong) UIColor *yLabelColor;
+@property (nonatomic, assign) SimpleBarChartYAxisLabelType yLabelType; // Default to Integer
 
 // Control the X-axis Labels
 @property (nonatomic, strong) UIFont *xLabelFont;

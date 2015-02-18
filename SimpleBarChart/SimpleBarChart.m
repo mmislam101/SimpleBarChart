@@ -53,6 +53,7 @@ dataSource	= _dataSource;
 	self.hasYLabels			= YES;
 	self.yLabelFont			= [UIFont fontWithName:@"Helvetica" size:12.0];
 	self.yLabelColor		= [UIColor blackColor];
+	self.yLabelType			= SimpleBarChartYAxisLabelTypeInteger;
 	self.xLabelFont			= [UIFont fontWithName:@"Helvetica" size:12.0];
 	self.xLabelColor		= [UIColor blackColor];
 	self.xLabelType			= SimpleBarChartXLabelTypeVerticle;
@@ -407,7 +408,7 @@ dataSource	= _dataSource;
 
 	while (yPos < yLabelFrameHeight)
 	{
-		NSString *stringFormat	= (_topValue <= 1.0) ? @"%.1f" : @"%.0f";
+		NSString *stringFormat	= (_yLabelType == SimpleBarChartYAxisLabelTypeFloat) ? @"%.1f" : @"%.0f";
 		NSString *yLabelString	= [NSString stringWithFormat:stringFormat, maxVal];
 		CGSize yLabelSize		= [yLabelString sizeWithFont:self.yLabelFont];
 		CGRect yLabelFrame		= CGRectMake(0.0,
